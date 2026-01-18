@@ -19,5 +19,5 @@ Rocket Back To Top is a lightweight phpBB extension that adds an animated rocket
 
 ## Author
 Nechev  
-phpBB Bulgaria / RoyalCraft Studio  
+phpBB Bulgaria  
 https://phpbb-bg.info
