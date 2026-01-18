@@ -2,7 +2,7 @@
     "name": "nechev/rocketbacktotop",
     "type": "phpbb-extension",
     "description": "Rocket Back To Top for phpBB",
-    "version": "1.0.0",
+    "version": "1.0.0-dev",
     "time": "2026-01-18",
     "license": "GPL-2.0-only",
     "authors": [
@@ -28,3 +28,4 @@
         }
     }
 }
+
