@@ -1,22 +1,43 @@
 document.addEventListener('DOMContentLoaded', function () {
-	const rocket = document.getElementById('rocket-top');
-	if (!rocket) return;
+	var rocket = document.getElementById('rocket-top');
 
-	let shownOnce = false;
+	if (!rocket)
+	{
+		return;
+	}
+
+	var shownOnce = false;
 
 	window.addEventListener('scroll', function () {
-		if (window.scrollY > 500 && !shownOnce) {
+		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+		if (scrollTop > 500 && !shownOnce)
+		{
 			rocket.classList.add('show');
 			shownOnce = true;
 		}
 
-		if (window.scrollY < 200) {
+		if (scrollTop < 200)
+		{
 			rocket.classList.remove('show');
 			shownOnce = false;
 		}
 	});
 
 	rocket.addEventListener('click', function () {
+		launchRocket();
+	});
+
+	rocket.addEventListener('keydown', function (event) {
+		if (event.key === 'Enter' || event.key === ' ')
+		{
+			event.preventDefault();
+			launchRocket();
+		}
+	});
+
+	function launchRocket()
+	{
 		rocket.classList.add('fly');
 
 		window.scrollTo({
@@ -24,9 +45,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			behavior: 'smooth'
 		});
 
-		setTimeout(() => {
+		setTimeout(function () {
 			rocket.classList.remove('fly');
 			rocket.classList.remove('show');
 		}, 1100);
-	});
+	}
 });

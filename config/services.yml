@@ -1,7 +1,5 @@
 services:
     nechev.rocketbacktotop.listener:
         class: nechev\rocketbacktotop\event\listener
-        arguments:
-            - '@template'
         tags:
             - { name: event.listener }
