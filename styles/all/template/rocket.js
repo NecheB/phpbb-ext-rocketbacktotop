@@ -1,53 +1,73 @@
-document.addEventListener('DOMContentLoaded', function () {
-	var rocket = document.getElementById('rocket-top');
+(function () {
+	function initRocketBackToTop() {
+		var rocket = document.getElementById('rocket-top');
 
-	if (!rocket)
-	{
-		return;
-	}
-
-	var shownOnce = false;
-
-	window.addEventListener('scroll', function () {
-		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-
-		if (scrollTop > 500 && !shownOnce)
-		{
-			rocket.classList.add('show');
-			shownOnce = true;
+		if (!rocket) {
+			return;
 		}
 
-		if (scrollTop < 200)
-		{
-			rocket.classList.remove('show');
-			shownOnce = false;
+		rocket.classList.add('rocket-top--ready');
+
+		function getScrollTop() {
+			return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 		}
-	});
 
-	rocket.addEventListener('click', function () {
-		launchRocket();
-	});
+		function setRocketVisible(isVisible) {
+			rocket.classList.toggle('show', isVisible);
+			rocket.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+			rocket.setAttribute('tabindex', isVisible ? '0' : '-1');
+		}
 
-	rocket.addEventListener('keydown', function (event) {
-		if (event.key === 'Enter' || event.key === ' ')
-		{
-			event.preventDefault();
+		function updateRocketVisibility() {
+			if (rocket.classList.contains('fly')) {
+				return;
+			}
+
+			setRocketVisible(getScrollTop() > 160);
+		}
+
+		function isReducedMotion() {
+			return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		}
+
+		window.addEventListener('scroll', updateRocketVisibility);
+		updateRocketVisibility();
+
+		rocket.addEventListener('click', function () {
 			launchRocket();
-		}
-	});
-
-	function launchRocket()
-	{
-		rocket.classList.add('fly');
-
-		window.scrollTo({
-			top: 0,
-			behavior: 'smooth'
 		});
 
-		setTimeout(function () {
-			rocket.classList.remove('fly');
-			rocket.classList.remove('show');
-		}, 1100);
+		rocket.addEventListener('keydown', function (event) {
+			if (event.key === 'Enter' || event.key === ' ') {
+				event.preventDefault();
+				launchRocket();
+			}
+		});
+
+		function launchRocket() {
+			if (rocket.classList.contains('fly')) {
+				return;
+			}
+
+			var reduceMotion = isReducedMotion();
+
+			rocket.classList.add('fly');
+
+			window.scrollTo({
+				top: 0,
+				behavior: reduceMotion ? 'auto' : 'smooth'
+			});
+
+			setTimeout(function () {
+				rocket.classList.remove('fly');
+				updateRocketVisibility();
+			}, reduceMotion ? 0 : 1100);
+		}
 	}
-});
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initRocketBackToTop);
+	} else {
+		initRocketBackToTop();
+	}
+}());

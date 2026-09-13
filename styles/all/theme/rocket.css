@@ -6,42 +6,71 @@
 	width: 48px;
 	height: 82px;
 
-	background: url('./images/rocket.png') center/contain no-repeat;
-
 	z-index: 9999;
 	cursor: pointer;
 
+	visibility: visible;
+	opacity: 1;
+	transform: translateY(0) scale(1);
+	pointer-events: auto;
+
+	transition:
+		opacity .6s ease,
+		transform .6s cubic-bezier(.25,.8,.25,1),
+		visibility 0s linear 0s;
+}
+
+#rocket-top.rocket-top--ready:not(.show) {
+	visibility: hidden;
 	opacity: 0;
 	transform: translateY(20px) scale(0.9);
 	pointer-events: none;
 
 	transition:
 		opacity .6s ease,
-		transform .6s cubic-bezier(.25,.8,.25,1);
+		transform .6s cubic-bezier(.25,.8,.25,1),
+		visibility 0s linear .6s;
 }
 
 #rocket-top.show {
+	visibility: visible;
 	opacity: 1;
 	transform: translateY(0) scale(1);
 	pointer-events: auto;
+	transition-delay: 0s;
 }
 
-#rocket-top:hover {
+#rocket-top:focus-visible {
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
+
+.rocket-top__body {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+
+	transition:
+		filter .2s ease,
+		transform .2s ease;
+}
+
+.rocket-top__image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	user-select: none;
+}
+
+#rocket-top:hover .rocket-top__body,
+#rocket-top:focus-visible .rocket-top__body {
 	filter: drop-shadow(0 0 14px rgba(255,120,0,.9));
 	transform: scale(1.08);
 }
 
-#rocket-top.show:not(.fly) {
-	animation: rocket-float 1.8s ease-in-out infinite;
-}
-
-@keyframes rocket-float {
-	0%   { transform: translateY(0) scale(1); }
-	50%  { transform: translateY(-10px) scale(1); }
-	100% { transform: translateY(0) scale(1); }
-}
-
-#rocket-top::after {
+.rocket-top__body::after {
 	content: '';
 	position: absolute;
 	left: 50%;
@@ -56,24 +85,49 @@
 	opacity: 0;
 }
 
-#rocket-top.fly::after {
+#rocket-top.fly .rocket-top__body::after {
 	opacity: 1;
-	animation: flame-flicker .12s infinite alternate;
-}
-
-@keyframes flame-flicker {
-	from { height: 20px; }
-	to   { height: 34px; }
 }
 
 #rocket-top.fly {
-	animation: rocket-launch 1s ease-in forwards;
 	pointer-events: none;
 }
 
-@keyframes rocket-launch {
-	to {
-		transform: translateY(-140vh) scale(0.9);
-		opacity: 0;
+@media (prefers-reduced-motion: no-preference) {
+	#rocket-top.show:not(.fly) {
+		animation: rocket-float 1.8s ease-in-out infinite;
+	}
+
+	#rocket-top.fly {
+		animation: rocket-launch 1s ease-in forwards;
+	}
+
+	#rocket-top.fly .rocket-top__body::after {
+		animation: flame-flicker .12s infinite alternate;
+	}
+
+	@keyframes rocket-float {
+		0%   { transform: translateY(0) scale(1); }
+		50%  { transform: translateY(-10px) scale(1); }
+		100% { transform: translateY(0) scale(1); }
+	}
+
+	@keyframes flame-flicker {
+		from { height: 20px; }
+		to   { height: 34px; }
+	}
+
+	@keyframes rocket-launch {
+		to {
+			transform: translateY(-140vh) scale(0.9);
+			opacity: 0;
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#rocket-top,
+	.rocket-top__body {
+		transition: none;
 	}
 }
