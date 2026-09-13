@@ -6,8 +6,6 @@
 			return;
 		}
 
-		rocket.classList.add('rocket-top--ready');
-
 		function getScrollTop() {
 			return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 		}
@@ -44,6 +42,8 @@
 			}
 		});
 
+		rocket.classList.add('rocket-top--ready');
+
 		function launchRocket() {
 			if (rocket.classList.contains('fly')) {
 				return;
@@ -60,6 +60,9 @@
 
 			setTimeout(function () {
 				rocket.classList.remove('fly');
+				if (document.activeElement === rocket) {
+					rocket.blur();
+				}
 				updateRocketVisibility();
 			}, reduceMotion ? 0 : 1100);
 		}
